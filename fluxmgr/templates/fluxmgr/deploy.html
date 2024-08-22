@@ -1,0 +1,85 @@
+{% extends 'fluxmgr/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}
+Deploy
+{% endblock %}
+
+{% block content %}
+
+<form id="deploy-flux-form">
+    {% csrf_token %}
+
+    {% bootstrap_form form layout=layout size=size %}
+
+    {% bootstrap_button button_type="submit" content="Deploy" %}
+    {% bootstrap_button button_type="reset" content="Cancel" %}
+</form>
+
+<script>
+    var loc = window.location;
+    var wsStart = 'ws://';
+    if (loc.protocol == 'https:') {
+        wsStart = 'wss://'
+    }
+    const deployFluxSocket = new WebSocket(
+        wsStart
+        + window.location.host
+        + '/ws/fluxmgr/deploy-flux/'
+    );
+
+    document.getElementById('deploy-flux-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        var clickedButton = document.activeElement; // Get the button that was clicked
+        alert("hello");
+
+        // var formData = document.getElementById('create-cluster-form');
+        // var clusterValue = formData.elements['cluster'].value;
+        // var tenantValue = formData.elements['tenant'].value;
+        // var mgmtClusterValue = formData.elements['mgmtCluster'].value;
+        // var stageValue = clickedButton.id
+
+        // createClusterSocket.send(JSON.stringify({
+        //     'stage': stageValue,
+        //     'cluster': clusterValue,
+        //     'tenant': tenantValue,
+        //     'mgmtCluster': mgmtClusterValue
+        // }))
+    });
+
+    // Define buffer variables
+    let messageBuffer = [];
+
+    // Function to process buffered messages
+    function processBuffer() {
+
+        // Process each message in the buffer
+        const stdout_text = document.querySelector('#output');
+
+        while (messageBuffer.length > 0) {
+            const message = messageBuffer.shift();
+            const data = JSON.parse(message);
+            stdout_text.value += (data.stdout);
+        }
+
+        stdout_text.scrollTop = stdout_text.scrollHeight;
+    }
+
+    // Event handler for incoming messages
+    deployFluxSocket.onmessage = function (e) {
+        // Add message to the buffer
+        messageBuffer.push(e.data);
+    };
+
+    setInterval(function () {
+        if (messageBuffer.length > 0) {
+            processBuffer();
+        }
+    }, 1000); // Process buffer every second
+
+    deployFluxSocket.onclose = function (e) {
+        console.error('Deploy flux socket closed unexpectedly');
+    };
+</script>
+{% endblock %}
