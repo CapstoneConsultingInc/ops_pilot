@@ -1,5 +1,5 @@
 """
-URL configuration for fluxops_pilot project.
+URL configuration for ops_pilot project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.urls import path
 from fluxmgr.views import (
-    HomePageView,
-    DeployView,
+    InstallView,
+)
+from landing.views import (
+landing_page_view
 )
 
 urlpatterns = [
-    path("", HomePageView.as_view(), name="home"),
-    path("deploy/", DeployView.as_view(), name="flux_deploy"),
+    path("", landing_page_view, name="home"),
+    path("install/", InstallView.as_view(), name="flux_install"),
 ]

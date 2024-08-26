@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import consumers
 
-cluster_manager_websocket_urlpatterns = [
-    path("ws/fluxmgr/deploy-flux/", consumers.CreateClusterConsumer.as_asgi()),
+flux_manager_websocket_urlpatterns = [
+    path("ws/fluxmgr/install-flux/", consumers.InstallFluxConsumer.as_asgi()),
+    path("ws/fluxmgr/delete-flux/", consumers.DeleteFluxConsumer.as_asgi()),
+    path("ws/fluxmgr/clean-flux/", consumers.CleanFluxConsumer.as_asgi()),
 ]

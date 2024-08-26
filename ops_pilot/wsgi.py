@@ -1,5 +1,5 @@
 """
-WSGI config for fluxops_pilot project.
+WSGI config for ops_pilot project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fluxops_pilot.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ops_pilot.settings')
 
 application = get_wsgi_application()

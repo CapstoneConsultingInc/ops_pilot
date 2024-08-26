@@ -6,7 +6,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from fluxmgr import fm_routes
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "captain_ops.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ops_pilot.settings")
 
 # The Asynchronous Server Gateway Interface (ASGI) is a calling convention 
 # for web servers to forward requests to asynchronous-capable Python programming 
@@ -15,7 +15,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "captain_ops.settings")
 # ORM models.
 django_asgi_app = get_asgi_application()
 
-all_routes = fm_routes.cluster_manager_websocket_urlpatterns
+all_routes = fm_routes.flux_manager_websocket_urlpatterns
     
 application = ProtocolTypeRouter(
     {
