@@ -3,18 +3,18 @@
 {% load django_bootstrap5 %}
 
 {% block title %}
-Flux Install
+Flux Delete
 {% endblock %}
 
 {% block content %}
 {% bootstrap_form_errors form %}
 <br>
-<form id="install-flux-form">
+<form id="delete-flux-form">
     {% csrf_token %}
 
     {% bootstrap_form form layout=layout size=size %}
 
-    {% bootstrap_button id="install" button_type="submit" content="Install" %}
+    {% bootstrap_button id="delete" button_type="submit" content="Delete" %}
 </form>
 <!-- Text area for displaying output -->
 <div class="mt-3">
@@ -31,21 +31,19 @@ Flux Install
     if (loc.protocol == 'https:') {
         wsStart = 'wss://'
     }
-    const installFluxSocket = new WebSocket(
+    const deleteFluxSocket = new WebSocket(
         wsStart
         + window.location.host
-        + '/ws/fluxmgr/install-flux/'
+        + '/ws/fluxmgr/delete-flux/'
     );
 
-    document.getElementById('install-flux-form').addEventListener('submit', async function (event) {
+    document.getElementById('delete-flux-form').addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        var formData = document.getElementById('install-flux-form');
-        var versionValue = formData.elements['version'].value;
+        var formData = document.getElementById('delete-flux-form');
         var clusterValue = formData.elements['cluster'].value;
 
-        installFluxSocket.send(JSON.stringify({
-            'version': versionValue,
+        deleteFluxSocket.send(JSON.stringify({
             'cluster': clusterValue
         }))
     });
@@ -69,7 +67,7 @@ Flux Install
     }
 
     // Event handler for incoming messages
-    installFluxSocket.onmessage = function (e) {
+    deleteFluxSocket.onmessage = function (e) {
         // Add message to the buffer
         messageBuffer.push(e.data);
     };
@@ -80,8 +78,8 @@ Flux Install
         }
     }, 1000); // Process buffer every second
 
-    installFluxSocket.onclose = function (e) {
-        console.error('Install flux socket closed unexpectedly');
+    deleteFluxSocket.onclose = function (e) {
+        console.error('Delete flux socket closed unexpectedly');
     };
 </script>
 {% endblock %}
